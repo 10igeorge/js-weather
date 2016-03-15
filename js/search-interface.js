@@ -1,6 +1,7 @@
 
 var apiKey = require("./../.env").apiKey;
 var convert = require("./../js/convert-temp.js").convert;
+var forecast = require("./../js/forecast.js").forecast;
 
 $(document).ready(function(){
   $("#citySearch").submit(function(event){
@@ -16,6 +17,10 @@ $(document).ready(function(){
       $('#details').append("<li>Temperature (Kelvin): " + response.main.temp.toPrecision(5) + "°</li>");
       $('#details').append("<li>Temperature: " + convert(response.main.temp, 'f').toPrecision(2) + "°F</li>");
       $('#details').append("<li>Temperature: " + convert(response.main.temp, 'c').toPrecision(2) + "°C</li>");
+      $.get('http://api.openweathermap.org/data/2.5/forecast?id=' + response.id + '&appid=' + apiKey).then(function(response) {
+        console.log(response);
+        forecast(response);
+      });
       }).fail(function(error) {
         $('#results').text(error.responseJSON.message);
     });
